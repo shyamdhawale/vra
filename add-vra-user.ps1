@@ -83,7 +83,7 @@ if ($global:DefaultVIServer.Name -eq $vCenterServer){
 	#Configue the permission
   	New-VIRole -Server $vCenterServer -Name $rolename -Privilege (Get-VIPrivilege -id $vRA_Privilegeslist) | Out-Null
 	
-	Write-Host "Set Permissions for $vRA_User using the new $Rolename Role" -ForeGroundColor Yellow
+	Write-Host "Set Permissions for $vRA_User on $Rolename Role" -ForeGroundColor Green
 	$rootFolder = Get-Folder -NoRecursion
 	New-VIPermission -entity $rootFolder -Principal $vra_user -Role $rolename -Propagate:$true | Out-Null
  	Disconnect-VIServer-server $vCenterServer -Confirm:$false
