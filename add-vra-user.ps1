@@ -7,7 +7,7 @@
 .NOTES
     Additional Notes, eg
     File Name  : add-vra-user.psa
-    Author     : Radhesham Dhawale - radhesham.dhawale
+    Author     : Radhesham Dhawale / shyam.dhawale@gmail.com
     
 .LINK
     A hyper link, eg
@@ -80,7 +80,11 @@ $vRA_PrivilegesList = @(
 Connect-VIserver -server $vCenterServer -Credential (Get-Credential -Message "Enter vCenter Admin Credentials! ")
 if ($global:DefaultVIServer.Name -eq $vCenterServer){
 	Write-Host "Successfully connected to vCenter: $($vCenterServer)"
-#Configue the permission
-  New-VIRole -Server $vCenterServer -Name $rolename -Privilege (Get-VIPrivilege -id $vRA_Privilegeslist) | Out-Null
-Disconnect-VIServer-server $vCenterServer -Confirm:$false
+	#Configue the permission
+  	New-VIRole -Server $vCenterServer -Name $rolename -Privilege (Get-VIPrivilege -id $vRA_Privilegeslist) | Out-Null
+	
+	Write-Host "Set Permissions for $vRA_User using the new $Rolename Role" -ForeGroundColor Yellow
+	$rootFolder = Get-Folder -NoRecursion
+	New-VIPermission -entity $rootFolder -Principal $vra_user -Role $rolename -Propagate:$true | Out-Null
+ 	Disconnect-VIServer-server $vCenterServer -Confirm:$false
 }
